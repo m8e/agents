@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Actions\Jetstream\CreateTeam;
+use App\Actions\Jetstream\DeleteTeam;
 use App\Actions\Jetstream\DeleteUser;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
@@ -13,7 +15,8 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        Jetstream::createTeamsUsing(CreateTeam::class);
+        Jetstream::deleteTeamsUsing(DeleteTeam::class);
     }
 
     /**
