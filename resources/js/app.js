@@ -7,3 +7,5 @@ import UIkit from "franken-ui/js/core.iife";
 window.UIkit = UIkit;
 
 import 'franken-ui/js/icon.iife';
+
+import '../css/app.css';

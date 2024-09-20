@@ -1,5 +1,6 @@
 export default {
     plugins: {
+        'tailwindcss/nesting': {},
         tailwindcss: {},
         autoprefixer: {},
         'franken-ui/postcss/sort-media-queries': {
