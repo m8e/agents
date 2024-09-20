@@ -13,9 +13,7 @@
     <link rel="stylesheet" href="{{ asset('fonts/geist-font/style.css') }}"/>
 
     @vite('resources/css/app.css')
-    @vite('resources/js/core.js')
     @vite('resources/js/app.js')
-    @vite('node_modules/franken-ui/dist/js/icon.iife.js')
     <script>
         const htmlElement = document.documentElement;
 
