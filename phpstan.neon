@@ -1,0 +1,16 @@
+# We have some work to do to cleanup both the src folder and the views. If you enable the bladestan extension there are
+# approx 1k errors. If you run the full phpstan scan there are thousands. For some reason our composer command
+# was hard coded to run just app folder, so we were missing many issues.
+
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+#    - ./vendor/tomasvotruba/bladestan/config/extension.neon
+
+parameters:
+	level: 5
+	paths:
+		- app
+		- resources/views
+	reportUnmatchedIgnoredErrors: false
+	excludePaths:
+	ignoreErrors:
