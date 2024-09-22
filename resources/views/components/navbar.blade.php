@@ -1,56 +1,62 @@
 <div class="border-b border-border px-4">
     <nav class="uk-navbar" uk-navbar="">
         <div class="uk-navbar-left gap-x-4 lg:gap-x-6">
-            <div class="uk-navbar-item w-[200px]">
-                <button class="uk-button uk-button-default w-full" type="button" aria-haspopup="true">
-                    <div class="flex flex-1 items-center gap-2"><span
+            <div class="uk-navbar-item">
+                <a href="{{ route('dashboard') }}">
+                    Home
+                </a>
+            </div>
+            <div class="uk-navbar-item w-[250px]">
+                <button class="uk-button uk-button-default w-full " type="button" aria-haspopup="true">
+                    <div class="flex flex-1 items-center gap-2 truncate"><span
                             class="relative flex h-5 w-5 shrink-0 overflow-hidden rounded-full"> <img
                                 class="aspect-square h-full w-full grayscale" alt="Alicia Koch"
-                                src="https://avatar.vercel.sh/personal.png"> </span> <span class="">Alicia Koch</span>
+                                src="https://avatar.vercel.sh/personal.png"> </span> <span class="">{{ Auth::user()->currentTeam->name }}</span>
                     </div>
                     <span class="size-4 opacity-50"> <uk-icon icon="chevrons-up-down"></uk-icon> </span></button>
-                <div class="uk-drop uk-dropdown w-[200px]" uk-dropdown="mode: click; pos: bottom-center">
+                <div class="uk-drop uk-dropdown w-[250px]" uk-dropdown="mode: click; pos: bottom-center">
                     <ul class="uk-dropdown-nav uk-nav">
-                        <li class="uk-nav-header">Personal Account</li>
-                        <li class="uk-active"><a class="uk-drop-close justify-between" href="#demo" uk-toggle=""
-                                                 role="button">
-                                <div class="flex flex-1 items-center gap-2"><span
-                                        class="relative flex h-5 w-5 shrink-0 overflow-hidden rounded-full"> <img
-                                            class="aspect-square h-full w-full grayscale" alt="Alicia Koch"
-                                            src="https://avatar.vercel.sh/personal.png"> </span> <span class="">Alicha Koch</span>
-                                </div>
-                                <uk-icon icon="check"></uk-icon>
-                            </a></li>
+                        <li class="uk-nav-header">Personal Team</li>
+                        <li class="uk-active">
+                            <x-switchable-team :team="Auth::user()->personalTeam()" />
+                        </li>
                         <li class="mt-3"></li>
-                        <li class="uk-nav-header">Teams</li>
-                        <li><a class="uk-drop-close justify-between" href="#demo" uk-toggle="" role="button">
-                                <div class="flex flex-1 items-center gap-2"><span
-                                        class="relative flex h-5 w-5 shrink-0 overflow-hidden rounded-full"> <img
-                                            class="aspect-square h-full w-full grayscale" alt="Alicia Koch"
-                                            src="https://avatar.vercel.sh/personal.png"> </span> <span class="">Acme Inc.</span>
-                                </div>
-                            </a></li>
-                        <li><a class="uk-drop-close justify-between" href="#demo" uk-toggle="" role="button">
-                                <div class="flex flex-1 items-center gap-2"><span
-                                        class="relative flex h-5 w-5 shrink-0 overflow-hidden rounded-full"> <img
-                                            class="aspect-square h-full w-full grayscale" alt="Alicia Koch"
-                                            src="https://avatar.vercel.sh/personal.png"> </span> <span class="">Monster Inc.</span>
-                                </div>
-                            </a></li>
-                        <li class="uk-nav-divider"></li>
-                        <li><a class="uk-drop-close" href="#demo" uk-toggle="" role="button">
-                                <uk-icon class="mr-2" icon="circle-plus"></uk-icon>
-                                Create a Team
-                            </a></li>
+                        <li class="uk-nav-header">Other Teams</li>
+                        <!-- Team Switcher -->
+                        @if (Auth::user()->allTeams()->count() > 1)
+                            @foreach (Auth::user()->allTeamsExceptPersonalTeam() as $team)
+                                <x-switchable-team :team="$team" />
+                            @endforeach
+                        @endif
+
+                        @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
+                            <li>
+                            <x-responsive-nav-link href="{{ route('teams.create') }}" :active="request()->routeIs('teams.create')">
+                                <uk-icon class="mr-2" icon="circle-plus"></uk-icon> {{ __('Create New Team') }}
+                            </x-responsive-nav-link>
+                            </li>
+                        @endcan
                     </ul>
                 </div>
             </div>
             <ul class="uk-navbar-nav gap-x-4 lg:gap-x-6">
-                <li class="uk-active"><a href="#demo" uk-toggle="" role="button">Objectives</a></li>
-                <li><a href="#demo" uk-toggle="" role="button">Flows</a></li>
-                <li><a href="#demo" uk-toggle="" role="button">Agents</a></li>
-                <li><a href="#demo" uk-toggle="" role="button">Tools</a></li>
-                <li><a href="#demo" uk-toggle="" role="button">Memory</a></li>
+                <li class="uk-active">
+                    <a href="{{ route('objectives') }}" uk-toggle="" role="button" uk-tooltip="Objectives">
+                        <uk-icon icon="goal"></uk-icon>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" uk-toggle="" role="button">
+                        <uk-icon icon="workflow"></uk-icon>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" uk-toggle="" role="button">
+                        <uk-icon icon="brain"></uk-icon>
+                    </a>
+                </li>
+{{--                <li><a href="#demo" uk-toggle="" role="button">Tools</a></li>--}}
+{{--                <li><a href="#demo" uk-toggle="" role="button">Memory</a></li>--}}
             </ul>
         </div>
         <div class="uk-navbar-right gap-x-4 lg:gap-x-6">

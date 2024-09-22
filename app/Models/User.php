@@ -63,4 +63,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // all teams except personal team
+    public function allTeamsExceptPersonalTeam()
+    {
+        return $this->allTeams()->filter(function ($team) {
+            return ! $team->is($this->personalTeam());
+        });
+    }
+
+    public function roles()
+    {
+        return $this->morphToMany(Role::class, 'model', 'model_has_roles');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

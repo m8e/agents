@@ -14,4 +14,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/objectives', [App\Http\Controllers\ObjectivesController::class, 'index'])->name('objectives');
+    Route::get('/objectives/{objective}', [App\Http\Controllers\ObjectivesController::class, 'show'])->name('objectives.show');
+    Route::get('/objectives/{objective}/edit', [App\Http\Controllers\ObjectivesController::class, 'edit'])->name('objectives.edit');
 });
