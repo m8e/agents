@@ -41,7 +41,7 @@
             </div>
             <ul class="uk-navbar-nav gap-x-4 lg:gap-x-6">
                 <li class="uk-active">
-                    <a href="{{ route('objectives') }}" uk-toggle="" role="button" uk-tooltip="Objectives">
+                    <a href="{{ route('goals') }}" uk-toggle="" role="button" uk-tooltip="Goals">
                         <uk-icon icon="goal"></uk-icon>
                     </a>
                 </li>
@@ -71,7 +71,6 @@
                         class="uk-card uk-card-body uk-card-default uk-drop uk-width-large"
                         uk-drop="mode: click; offset: 28"
                     >
-                        <uk-theme-switcher></uk-theme-switcher>
                     </div>
                 </div>
             </div>

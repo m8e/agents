@@ -45,8 +45,8 @@ class Team extends JetstreamTeam
         ];
     }
 
-    public function objectives()
+    public function goals()
     {
-        return $this->hasMany(Objective::class);
+        return $this->hasMany(Goal::class);
     }
 }

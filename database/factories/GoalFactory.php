@@ -3,14 +3,14 @@
 namespace Database\Factories;
 
 use App\Models\Agent;
-use App\Models\Objective;
+use App\Models\Goal;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ObjectiveFactory extends Factory
+class GoalFactory extends Factory
 {
-    protected $model = Objective::class;
+    protected $model = Goal::class;
 
     public function definition()
     {

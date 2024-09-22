@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class () extends Migration {
     public function up(): void
     {
         // Create agents table
-        Schema::create('agents', function (Blueprint $table) {
+        Schema::create('agents', function (Blueprint $table): void {
             $table->id();
 
             $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
@@ -32,7 +32,7 @@ return new class extends Migration {
         });
 
         // Create activity_logs table
-        Schema::create('activity_logs', function (Blueprint $table) {
+        Schema::create('activity_logs', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
@@ -48,7 +48,7 @@ return new class extends Migration {
         });
 
         // Create comments table
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade');
@@ -62,7 +62,7 @@ return new class extends Migration {
         });
 
         // Create objectives table
-        Schema::create('objectives', function (Blueprint $table) {
+        Schema::create('goals', function (Blueprint $table): void {
             $table->id();
 
             $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
@@ -92,29 +92,19 @@ return new class extends Migration {
         });
 
         // Create objective milestones table
-        Schema::create('milestones', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('objective_id')->constrained()->onDelete('cascade');
+            $table->foreignId('goal_id')->constrained()->onDelete('cascade');
             $table->foreignId('assigned_to')->nullable()->constrained('agents')->onDelete('set null');
 
             $table->string('title');
             $table->integer('progress')->default(0);
 
-            $table->enum('milestone_status', ['not_started', 'in_progress', 'completed'])->default('not_started');
-            $table->enum('milestone_priority', ['critical', 'high', 'medium', 'low'])->default('medium');
+            $table->enum('status', ['not_started', 'in_progress', 'completed'])->default('not_started');
+            $table->enum('priority', ['critical', 'high', 'medium', 'low'])->default('medium');
 
             $table->timestamps();
             $table->softDeletes();
-        });
-
-        // Create milestone_dependencies table
-        Schema::create('milestones_dependencies', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('milestone_id')->constrained('milestones')->onDelete('cascade');
-            $table->foreignId('depends_on_milestone_id')->constrained('milestones')->onDelete('cascade');
-            $table->timestamps();
-
-            $table->unique(['milestone_id', 'depends_on_milestone_id'], 'milestone_index');
         });
     }
 };

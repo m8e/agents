@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\ActivityLog;
 use App\Models\Agent;
 use App\Models\Comment;
+use App\Models\Goal;
 use App\Models\Milestone;
 use App\Models\Objective;
+use App\Models\Task;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -14,13 +16,13 @@ use Laravel\Jetstream\Jetstream;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         // Create Users
         $users = User::factory()->count(25)->create();
 
         // Create Teams and Assign Users
-        $teams = Team::factory()->count(5)->create()->each(function ($team, $index) use ($users) {
+        $teams = Team::factory()->count(5)->create()->each(function ($team, $index) use ($users): void {
             // Assign 5 users to each team
             $teamUsers = $users->slice($index * 5, 5);
 
@@ -38,7 +40,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
             // Create Objectives
-            $objectives = Objective::factory()->count(10)->create([
+            $objectives = Goal::factory()->count(10)->create([
                 'team_id' => $team->id,
                 'user_id' => $teamUsers->random()->id,
                 'agent_id' => $agents->random()->id,
@@ -46,25 +48,15 @@ class DatabaseSeeder extends Seeder
 
             foreach ($objectives as $objective) {
                 // Create Milestones for each Objective
-                $milestones = Milestone::factory()->count(5)->create([
-                    'objective_id' => $objective->id,
+                $milestones = Task::factory()->count(5)->create([
+                    'goal_id' => $objective->id,
                     'assigned_to' => $agents->random()->id,
                 ]);
-
-                // Create Milestone Dependencies
-                foreach ($milestones as $milestone) {
-                    // Each milestone may depend on a previous milestone
-                    $possibleDependencies = $milestones->where('id', '<', $milestone->id);
-                    if ($possibleDependencies->isNotEmpty()) {
-                        $dependencyId = $possibleDependencies->random()->id;
-                        $milestone->dependencies()->attach($dependencyId);
-                    }
-                }
 
                 // Create Comments for each Objective
                 Comment::factory()->count(3)->create([
                     'user_id' => $teamUsers->random()->id,
-                    'related_object_type' => Objective::class,
+                    'related_object_type' => Goal::class,
                     'related_object_id' => $objective->id,
                 ]);
 
@@ -73,7 +65,7 @@ class DatabaseSeeder extends Seeder
                     'team_id' => $team->id,
                     'user_id' => $teamUsers->random()->id,
                     'agent_id' => $agents->random()->id,
-                    'related_object_type' => Objective::class,
+                    'related_object_type' => Goal::class,
                     'related_object_id' => $objective->id,
                 ]);
             }

@@ -33,18 +33,13 @@ class Agent extends Model
         return $this->belongsTo(Team::class);
     }
 
-    public function objectives()
+    public function goals()
     {
-        return $this->hasMany(Objective::class, 'assigned_to');
+        return $this->hasMany(Goal::class, 'assigned_to');
     }
 
-    public function milestones()
+    public function tasks()
     {
-        return $this->hasMany(Milestone::class, 'assigned_to');
-    }
-
-    public function roles()
-    {
-        return $this->morphToMany(Role::class, 'model', 'model_has_roles');
+        return $this->hasMany(Task::class, 'assigned_to');
     }
 }
