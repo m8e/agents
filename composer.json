@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.0",
         "openai-php/laravel": "^0.10.1",
-        "spatie/laravel-permission": "^6.9"
+        "spatie/laravel-permission": "^6.9",
+        "symfony/workflow": "^7.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",

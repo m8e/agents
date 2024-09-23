@@ -55,27 +55,22 @@
                         <uk-icon icon="brain"></uk-icon>
                     </a>
                 </li>
+                <li>
+                    <a href="#" uk-toggle="" role="button" uk-tooltip="Debugger">
+                        <uk-icon icon="bug-play"></uk-icon>
+                    </a>
+                </li>
 {{--                <li><a href="#demo" uk-toggle="" role="button">Tools</a></li>--}}
 {{--                <li><a href="#demo" uk-toggle="" role="button">Memory</a></li>--}}
             </ul>
         </div>
         <div class="uk-navbar-right gap-x-4 lg:gap-x-6">
-            <div class="uk-navbar-item w-[150px] lg:w-[300px]"><input class="uk-input" placeholder="Search" type="text">
+            <div class="uk-navbar-item w-[150px] lg:w-[300px]">
+                <input class="uk-input" placeholder="Search" type="text">
             </div>
+
             <div class="uk-navbar-item">
-                <div class="uk-inline">
-                    <button class="uk-icon-button uk-icon-button-small uk-icon-button-outline">
-                        <uk-icon icon="palette" uk-cloak></uk-icon>
-                    </button>
-                    <div
-                        class="uk-card uk-card-body uk-card-default uk-drop uk-width-large"
-                        uk-drop="mode: click; offset: 28"
-                    >
-                    </div>
-                </div>
-            </div>
-            <div class="uk-navbar-item"><a
-                    class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent ring-ring focus:outline-none focus-visible:ring-1"
+                <a class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent ring-ring focus:outline-none focus-visible:ring-1"
                     href="#" role="button" aria-haspopup="true"> <span
                         class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full"> <img
                             class="aspect-square h-full w-full" alt="@shadcn"
