@@ -31,4 +31,10 @@ class GoalsController extends Controller
         return view('goals.edit')
             ->with('goal', $goal);
     }
+
+    public function create()
+    {
+        // Return the view
+        return view('goals.create');
+    }
 }

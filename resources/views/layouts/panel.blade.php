@@ -88,11 +88,8 @@
 </flux:sidebar>
 
 <flux:main container>
-    <x-flux::heading-with-action>Good afternoon, Olivia</x-flux::heading-with-action>
-    <flux:subheading size="lg" class="mb-6">Here's what's new today</flux:subheading>
-
+    {{ $header }}
     <flux:separator variant="subtle" />
-
     {{ $slot }}
 </flux:main>
 
