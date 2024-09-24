@@ -88,7 +88,7 @@
 </flux:sidebar>
 
 <flux:main container>
-    <flux:heading size="xl" level="1">Good afternoon, Olivia</flux:heading>
+    <x-flux::heading-with-action>Good afternoon, Olivia</x-flux::heading-with-action>
     <flux:subheading size="lg" class="mb-6">Here's what's new today</flux:subheading>
 
     <flux:separator variant="subtle" />
