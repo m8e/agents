@@ -15,7 +15,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/goals', [App\Http\Controllers\GoalsController::class, 'index'])->name('goals');
+    Route::get('/goals', [App\Http\Controllers\GoalsController::class, 'index'])->name('goals.index');
     Route::get('/goals/{goal}', [App\Http\Controllers\GoalsController::class, 'show'])->name('goals.show');
     Route::get('/goals/{goal}/edit', [App\Http\Controllers\GoalsController::class, 'edit'])->name('goals.edit');
 });

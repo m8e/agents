@@ -2,9 +2,9 @@
     <flux:table>
         <flux:columns>
             <flux:column>Customer</flux:column>
-            <flux:column>Date</flux:column>
             <flux:column>Status</flux:column>
-            <flux:column>Amount</flux:column>
+            <flux:column>Date</flux:column>
+            <flux:column>Progress</flux:column>
         </flux:columns>
 
         <flux:rows>
@@ -12,9 +12,9 @@
                 @foreach($goals as $goal)
                 <flux:row>
                     <flux:cell>{{ $goal->title }}</flux:cell>
-                    <flux:cell>Jul 29, 10:45 AM</flux:cell>
                     <flux:cell><flux:badge color="green" size="sm" inset="top bottom">{{ $goal->status }}</flux:badge></flux:cell>
-                    <flux:cell variant="strong">$49.00</flux:cell>
+                    <flux:cell>{{ $goal->created_at->format('M d, Y') }}</flux:cell>
+                    <flux:cell variant="strong">30%</flux:cell>
                 </flux:row>
                 @endforeach
             @endunless
