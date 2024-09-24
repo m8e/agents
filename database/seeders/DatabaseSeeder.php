@@ -42,9 +42,13 @@ class DatabaseSeeder extends Seeder
         $users = User::factory()->count(25)->create();
 
         // Create teams and assign users
-        $teams = Team::factory()->count(5)->create()->each(function ($team, $index) use ($users, $owner): void {
+        $teams = Team::factory()->count(5)->create();
+
+        $teams->push($owner->personalTeam());
+
+        $teams->each(function ($team, $index) use ($users, $owner): void {
             // Assign 5 users to each team
-            $teamUsers = $users->slice($index * 5, 5);
+            $teamUsers = $users;
 
             foreach ($teamUsers as $user) {
                 // Add users to the team
@@ -179,7 +183,6 @@ class DatabaseSeeder extends Seeder
                     'related_object_id' => $goal->id,
                     'details' => 'Goal created and tasks assigned.', // Updated field name
                 ]);
-
             }
         });
     }

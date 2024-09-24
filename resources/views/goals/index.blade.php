@@ -8,7 +8,7 @@
         </flux:columns>
 
         <flux:rows>
-            @unless($goals->count())
+            @if($goals->count())
                 @foreach($goals as $goal)
                 <flux:row>
                     <flux:cell>{{ $goal->title }}</flux:cell>
@@ -17,7 +17,7 @@
                     <flux:cell variant="strong">30%</flux:cell>
                 </flux:row>
                 @endforeach
-            @endunless
+            @endif
         </flux:rows>
     </flux:table>
 
