@@ -4,9 +4,11 @@
 
 namespace App\Agents;
 
+use App\Contracts\AgentContract;
+use App\Contracts\MessageContract;
 use Cognesy\Instructor\Instructor;
 
-abstract class BaseAgent
+abstract class BaseAgent implements AgentContract
 {
     protected Instructor $instructor;
     protected array $conversationHistory = [];
@@ -16,7 +18,7 @@ abstract class BaseAgent
         $this->instructor = new Instructor();
     }
 
-    public function receiveMessage(string $message): string
+    public function receiveMessage(MessageContract $message): void
     {
         // Update conversation history
         $this->conversationHistory[] = ['role' => 'user', 'content' => $message];
@@ -26,8 +28,6 @@ abstract class BaseAgent
 
         // Update conversation history with the agent's response
         $this->conversationHistory[] = ['role' => 'assistant', 'content' => $response];
-
-        return $response;
     }
 
     abstract protected function processMessage(string $message): string;
