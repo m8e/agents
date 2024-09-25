@@ -9,7 +9,7 @@ interface MessageContract
     public function getAgentId(): int;
     public function getGoalId(): ?int;
     public function getTaskId(): ?int;
-    public function getSender(): string; // 'user', 'llm'
+    public function getSender(): AgentContract; // 'user', 'llm'
     public function getContent(): string;
 
     // Metadata

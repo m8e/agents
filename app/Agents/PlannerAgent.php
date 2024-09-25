@@ -4,6 +4,7 @@
 
 namespace App\Agents;
 
+use Cognesy\Instructor\Enums\Mode;
 use Cognesy\Instructor\Instructor;
 
 class PlannerAgent extends BaseAgent
@@ -24,7 +25,9 @@ class PlannerAgent extends BaseAgent
             responseModel: $planStructure,
             options: [
                 'prompt' => "Given the user's goal, generate a plan with subtasks, agents, and tools required to accomplish it.",
-            ]
+            ],
+
+            mode: Mode::Json
         );
 
         return $plan;

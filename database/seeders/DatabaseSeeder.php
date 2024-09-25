@@ -11,7 +11,6 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Laravel\Jetstream\Jetstream;
 
 class DatabaseSeeder extends Seeder
 {
@@ -35,155 +34,120 @@ class DatabaseSeeder extends Seeder
         // Create a primary user with a personal team
         $owner = User::factory()->withPersonalTeam()->create([
             'email' => 'owner@example.com',
-            'name' => 'Owner User',
+            'name'  => 'Owner User',
         ]);
 
-        // Create additional users
+        // Create additional users (optional)
         $users = User::factory()->count(25)->create();
 
-        // Create teams and assign users
-        $teams = Team::factory()->count(5)->create();
+        // Get the owner's personal team
+        $team = $owner->personalTeam();
 
-        $teams->push($owner->personalTeam());
+        // Assign users to the team (optional)
+        foreach ($users as $user) {
+            $team->users()->attach($user, ['role' => 'editor']);
+        }
 
-        $teams->each(function ($team, $index) use ($users, $owner): void {
-            // Assign 5 users to each team
-            $teamUsers = $users;
+        // Create agents associated with the team
+        $agents = Agent::factory()->count(3)->create([
+            'team_id' => $team->id,
+        ]);
 
-            foreach ($teamUsers as $user) {
-                // Add users to the team
-                $team->users()->attach($user, ['role' => 'editor']);
-            }
+        // Create at least 30 goals
+        $goals = [];
 
-            // Set the owner as the team owner
-            $team->update(['user_id' => $owner->id]);
-
-            // Create agents associated with the team
-            $agents = Agent::factory()->count(3)->create([
-                'team_id' => $team->id,
+        for ($i = 0; $i < 30; $i++) {
+            $goal = Goal::create([
+                'team_id'     => $team->id,
+                'user_id'     => $owner->id,
+                'agent_id'    => $agents->random()->id,
+                'title'       => 'Goal ' . ($i + 1),
+                'description' => 'Description for Goal ' . ($i + 1),
+                'start_date'  => now(),
+                'status'      => 'not_started',
+                'priority'    => 'normal',
+                'risk_level'  => 'medium',
             ]);
 
-            // Define realistic goals for an agentic system
-            $goalsData = [
-                [
-                    'title' => 'Develop AI-Powered Chatbot',
-                    'description' => 'Create a chatbot to handle customer inquiries using AI.',
-                ],
-                [
-                    'title' => 'Implement Automated Email Sorting',
-                    'description' => 'Design an agent to categorize incoming emails automatically.',
-                ],
-                [
-                    'title' => 'Create Predictive Maintenance System',
-                    'description' => 'Develop an AI agent to predict equipment failures before they occur.',
-                ],
-                [
-                    'title' => 'Enhance Fraud Detection Mechanisms',
-                    'description' => 'Build an agent to identify and prevent fraudulent activities.',
-                ],
-                [
-                    'title' => 'Optimize Content Recommendation Engine',
-                    'description' => 'Improve the recommendation system using advanced AI algorithms.',
-                ],
-            ];
+            $goals[] = $goal;
+        }
 
-            foreach ($goalsData as $goalData) {
-                $goal = Goal::create([
-                    'team_id' => $team->id,
-                    'user_id' => $teamUsers->random()->id,
-                    'agent_id' => $agents->random()->id,
-                    'title' => $goalData['title'],
-                    'description' => $goalData['description'],
-                    'start_date' => now(),
-                    'status' => 'not_started',
-                    'priority' => 'normal',
-                    'risk_level' => 'medium',
+        foreach ($goals as $goal) {
+            // Decide how many tasks to create for this goal
+            $numTasks = rand(5, 30);
+
+            // Initialize an array to keep track of tasks
+            $tasks = [];
+
+            // Create the initial task queue
+            $taskQueue = [];
+
+            // Create the root tasks (tasks with no parent)
+            $numRootTasks = rand(1, min(5, $numTasks)); // At least 1 root task
+
+            for ($i = 0; $i < $numRootTasks; $i++) {
+                $task = Task::create([
+                    'goal_id'        => $goal->id,
+                    'assigned_to'    => $agents->random()->id,
+                    'title'          => 'Task ' . ($i + 1) . ' for Goal ' . $goal->id,
+                    'status'         => 'not_started',
+                    'priority'       => 'medium',
+                    'parent_task_id' => null,
                 ]);
 
-                // Define realistic tasks for each goal
-                $tasksData = [];
-
-                switch ($goalData['title']) {
-                    case 'Develop AI-Powered Chatbot':
-                        $tasksData = [
-                            'Gather Frequently Asked Questions',
-                            'Design Conversation Flow',
-                            'Develop Natural Language Processing Module',
-                            'Integrate Chatbot with Website',
-                            'Conduct User Acceptance Testing',
-                        ];
-                        break;
-
-                    case 'Implement Automated Email Sorting':
-                        $tasksData = [
-                            'Analyze Email Categories',
-                            'Develop Classification Algorithms',
-                            'Integrate with Email Server',
-                            'Test Sorting Accuracy',
-                            'Deploy to All Users',
-                        ];
-                        break;
-
-                    case 'Create Predictive Maintenance System':
-                        $tasksData = [
-                            'Collect Equipment Data Logs',
-                            'Identify Failure Patterns',
-                            'Develop Predictive Models',
-                            'Integrate with Monitoring Systems',
-                            'Train Maintenance Staff',
-                        ];
-                        break;
-
-                    case 'Enhance Fraud Detection Mechanisms':
-                        $tasksData = [
-                            'Review Current Security Measures',
-                            'Identify Common Fraud Indicators',
-                            'Develop Real-Time Monitoring Agent',
-                            'Implement Machine Learning Models',
-                            'Set Up Alert System',
-                        ];
-                        break;
-
-                    case 'Optimize Content Recommendation Engine':
-                        $tasksData = [
-                            'Analyze User Interaction Data',
-                            'Improve Recommendation Algorithms',
-                            'Implement A/B Testing',
-                            'Gather User Feedback',
-                            'Deploy Updates to Production',
-                        ];
-                        break;
-                }
-
-                foreach ($tasksData as $taskTitle) {
-                    Task::create([
-                        'goal_id' => $goal->id,
-                        'assigned_to' => $agents->random()->id,
-                        'title' => $taskTitle,
-                        'status' => 'not_started',
-                        'priority' => 'medium',
-                    ]);
-                }
-
-                // Create a comment for each goal
-                Comment::create([
-                    'user_id' => $teamUsers->random()->id,
-                    'related_object_type' => Goal::class,
-                    'related_object_id' => $goal->id,
-                    'comment_text' => 'This goal is critical for our next quarter objectives.',
-                ]);
-
-                // Create an activity log for each goal
-                ActivityLog::create([
-                    'team_id' => $team->id,
-                    'user_id' => $teamUsers->random()->id,
-                    'agent_id' => $agents->random()->id,
-                    'activity_type' => 'created', // Updated field name
-                    'related_object_type' => Goal::class,
-                    'related_object_id' => $goal->id,
-                    'details' => 'Goal created and tasks assigned.', // Updated field name
-                ]);
+                $tasks[]     = $task;
+                $taskQueue[] = $task; // Add to queue to create subtasks
             }
-        });
+
+            $remainingTasks = $numTasks - $numRootTasks;
+
+            // Now create child tasks under the tasks in the queue
+            while ($remainingTasks > 0 && !empty($taskQueue)) {
+                // Pop a task from the queue
+                $parentTask = array_shift($taskQueue);
+
+                // Decide how many child tasks to create under this parent
+                $numChildTasks = rand(1, min(5, $remainingTasks)); // Limit to 5 child tasks or remaining tasks
+
+                for ($i = 0; $i < $numChildTasks; $i++) {
+                    $task = Task::create([
+                        'goal_id'        => $goal->id,
+                        'assigned_to'    => $agents->random()->id,
+                        'title'          => 'Subtask ' . ($i + 1) . ' under Task ' . $parentTask->id . ' for Goal ' . $goal->id,
+                        'status'         => 'not_started',
+                        'priority'       => 'medium',
+                        'parent_task_id' => $parentTask->id,
+                    ]);
+
+                    $tasks[]     = $task;
+                    $taskQueue[] = $task; // Add the new task to the queue for further subtasks
+                    $remainingTasks--;
+
+                    if ($remainingTasks <= 0) {
+                        break;
+                    }
+                }
+            }
+
+            // Optionally, create comments and activity logs for each goal
+            // Create a comment for the goal
+            Comment::create([
+                'user_id'            => $users->random()->id,
+                'related_object_type' => Goal::class,
+                'related_object_id'   => $goal->id,
+                'comment_text'        => 'This goal is critical for our next quarter objectives.',
+            ]);
+
+            // Create an activity log for the goal
+            ActivityLog::create([
+                'team_id'            => $team->id,
+                'user_id'            => $users->random()->id,
+                'agent_id'           => $agents->random()->id,
+                'activity_type'      => 'created',
+                'related_object_type' => Goal::class,
+                'related_object_id'   => $goal->id,
+                'details'            => 'Goal created and tasks assigned.',
+            ]);
+        }
     }
 }

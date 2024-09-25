@@ -4,7 +4,10 @@
         <x-flux::heading-with-action>
             Good afternoon, {{ auth()->user()->name }}
             <x-slot name="actions">
-                <flux:button size="sm" variant="primary" href="{{ route('goals.create') }}" icon="plus">New goal</flux:button>
+                <flux:modal.trigger name="edit-profile">
+                    <flux:button>Edit profile</flux:button>
+                </flux:modal.trigger>
+                <flux:button href="{{ route('goals.create') }}" icon="plus">New goal</flux:button>
             </x-slot>
         </x-flux::heading-with-action>
         <flux:subheading size="lg" class="mb-6 mt-2">Here's a summary of all your active goals.</flux:subheading>
@@ -31,5 +34,22 @@
             @endif
         </flux:rows>
     </flux:table>
+
+    <flux:modal name="edit-profile" class="md:w-96 space-y-6">
+        <div>
+            <flux:heading size="lg">Update profile</flux:heading>
+            <flux:subheading>Make changes to your personal details.</flux:subheading>
+        </div>
+
+        <flux:input label="Name" placeholder="Your name" />
+
+        <flux:input label="Date of birth" type="date" />
+
+        <div class="flex">
+            <flux:spacer />
+
+            <flux:button type="submit" variant="primary">Save changes</flux:button>
+        </div>
+    </flux:modal>
 
 </x-panel-layout>

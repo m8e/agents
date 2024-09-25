@@ -13,12 +13,36 @@ class Task extends Model
 
     protected $fillable = [
         'goal_id',
+        'parent_task_id',
         'assigned_to',
         'title',
         'progress',
         'task_status',
         'task_priority',
     ];
+
+    // set custom collection class
+    public function newCollection(array $models = []) {
+        return new TaskCollection($models);
+    }
+
+    /**
+     * Define the relationship for parent task.
+     * A task can have one parent.
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Task::class, 'parent_task_id');
+    }
+
+    /**
+     * Define the relationship for child tasks.
+     * A task can have many child tasks.
+     */
+    public function children()
+    {
+        return $this->hasMany(Task::class, 'parent_task_id');
+    }
 
     /**
      * Get the goal that this task belongs to.
