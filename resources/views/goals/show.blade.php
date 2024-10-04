@@ -3,15 +3,21 @@
         <x-flux::heading-with-action size="xl" level="1">
             {{ $goal->title }}
             <x-slot name="actions">
-                <x-flux::badge size="lg" color="indigo">
-                    Priority: {{ $goal->priority }}
+                @empty($goal->tasks)
+                <x-flux::button color="indigo" icon-trailing="sparkles">
+                    Generate Tasks
+                </x-flux::button>
+                @else
+                <x-flux::badge color="green" icon="arrow-trending-up">
+                    {{ str($goal->priority)->replace('_', ' ')->title() }}
                 </x-flux::badge>
-                <x-flux::badge size="lg" color="indigo">
-                    Status: {{ $goal->status }}
+                <x-flux::badge color="orange" icon="exclamation-triangle">
+                    {{ str($goal->status)->replace('_', ' ')->title() }}
                 </x-flux::badge>
-                <x-flux::badge size="lg" color="indigo">
-                    Risk: {{ $goal->risk_level }}
+                <x-flux::badge color="red" icon="bell-alert">
+                    {{ str($goal->risk_level)->replace('_', ' ')->title() }}
                 </x-flux::badge>
+                    @endempty
             </x-slot>
         </x-flux::heading-with-action>
         <flux:subheading size="lg" class="mb-6 mt-2">

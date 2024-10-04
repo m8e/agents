@@ -13,6 +13,23 @@
         <flux:subheading size="lg" class="mb-6 mt-2">Here's a summary of all your active goals.</flux:subheading>
     </x-slot>
 
+    <flux:modal name="edit-profile" class="md:w-96 space-y-6">
+        <div>
+            <flux:heading size="lg">Update profile</flux:heading>
+            <flux:subheading>Make changes to your personal details.</flux:subheading>
+        </div>
+
+        <flux:input label="Name" placeholder="Your name" />
+
+        <flux:input label="Date of birth" type="date" />
+
+        <div class="flex">
+            <flux:spacer />
+
+            <flux:button type="submit" variant="primary">Save changes</flux:button>
+        </div>
+    </flux:modal>
+
     <flux:table>
         <flux:columns>
             <flux:column>Goal</flux:column>
@@ -34,22 +51,5 @@
             @endif
         </flux:rows>
     </flux:table>
-
-    <flux:modal name="edit-profile" class="md:w-96 space-y-6">
-        <div>
-            <flux:heading size="lg">Update profile</flux:heading>
-            <flux:subheading>Make changes to your personal details.</flux:subheading>
-        </div>
-
-        <flux:input label="Name" placeholder="Your name" />
-
-        <flux:input label="Date of birth" type="date" />
-
-        <div class="flex">
-            <flux:spacer />
-
-            <flux:button type="submit" variant="primary">Save changes</flux:button>
-        </div>
-    </flux:modal>
 
 </x-panel-layout>

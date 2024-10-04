@@ -9,8 +9,18 @@ use Illuminate\Support\Facades\View;
 
 class GoalsController extends Controller
 {
+    public function onboarding()
+    {
+        // Return the view
+        return view('goals.onboarding');
+    }
+
     public function index()
     {
+        if (Auth::user()->currentTeam->goals->isEmpty()) {
+            return redirect(route('goals.onboarding'));
+        }
+
         // Set the view composer manually
         View::composer('goals.index', GoalsIndexViewComposer::class);
 
@@ -23,6 +33,21 @@ class GoalsController extends Controller
     {
         // Return the view
         return view('goals.show', compact('goal'));
+    }
+
+    public function store()
+    {
+        // Validate the request
+        // Create the goal
+        Goal::create([
+            'title' => request('title'),
+            'description' => request('description'),
+            'team_id' => Auth::user()->currentTeam->id,
+            'user_id' => Auth::id(),
+        ]);
+
+        // Redirect to the goals index
+        return redirect(route('goals.index'));
     }
 
     public function edit($goal)

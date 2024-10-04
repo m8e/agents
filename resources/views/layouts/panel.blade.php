@@ -88,8 +88,10 @@
 </flux:sidebar>
 
 <flux:main container>
-    {{ $header }}
-    <flux:separator variant="subtle" />
+    @isset($header)
+        {{ $header }}
+        <flux:separator variant="subtle" />
+    @endif
     {{ $slot }}
 </flux:main>
 
