@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Agents\Agents;
 
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
 
-class ReflectionAgentService
+class ReflectionAgent
 {
     protected $model;
 

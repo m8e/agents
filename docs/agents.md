@@ -1,9 +1,9 @@
 ### Reflection Agent
 
 ```php
-use App\Services\ReflectionAgentService;
+use App\Agents\Agents\ReflectionAgent;
 
-$agent = app(ReflectionAgentService::class);
+$agent = app(ReflectionAgent::class);
 
 // Define the generation system prompt
 $generationSystemPrompt =

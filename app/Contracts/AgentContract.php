@@ -2,38 +2,31 @@
 
 namespace App\Contracts;
 
+use App\Contracts\MessageContract;
+
 interface AgentContract
 {
-    // Basic Agent Information
-    public function getId(): int;
-    public function getTeamId(): int;
-    public function getName(): string;
-    public function getDescription(): ?string;
-    public function getType(): string; // 'ai', 'human', 'bot'
-    public function getStatus(): string; // 'active', 'inactive', 'suspended'
+    /**
+     * Runs the agent with the provided input data.
+     *
+     * @param mixed $inputData The input data for the agent to process.
+     * @param string|null $screenshot Optional screenshot URL or data.
+     * @param string|null $sessionId Optional session ID.
+     * @param string $model The model to use for processing.
+     * @return mixed The agent's response.
+     */
+    public function run(
+        mixed $inputData,
+        ?string $screenshot = null,
+        ?string $sessionId = null,
+        string $model = 'gpt-4'
+    );
 
-    // Configuration and Capabilities
-    public function getConfig(): ?array;
-    public function setConfig(array $config): void;
-    public function getCapabilities(): ?array;
-    public function setCapabilities(array $capabilities): void;
-
-    // Activity Tracking
-    public function getLastActiveAt(): ?\DateTimeInterface;
-    public function updateLastActiveAt(): void;
-
-    // State Management
-    public function activate(): void;
-    public function deactivate(): void;
-    public function suspend(): void;
-
-    // Interactions
-    public function sendMessage(MessageContract $message): void;
+    /**
+     * Receives a message and processes it.
+     *
+     * @param MessageContract $message The message to process.
+     * @return void
+     */
     public function receiveMessage(MessageContract $message): void;
-
-    // Associations
-    public function assignGoal(GoalContract $goal): void;
-    public function getAssignedGoals(): array; // Returns an array of IGoal
-    public function assignTask(TaskContract $task): void;
-    public function getAssignedTasks(): array; // Returns an array of ITask
 }

@@ -2,7 +2,7 @@
 Step 1: Create the Tool
 
 ```php
-use App\Services\ToolService;
+use App\Agents\Tools\ToolService;
 
 // Assume $agentId is the ID of the agent we're associating the tool with
 $agentId = 1;

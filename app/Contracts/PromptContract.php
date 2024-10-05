@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface MessageContract
+interface PromptContract
 {
 
 }

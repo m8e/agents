@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Agents\Tools;
 
 use App\Models\Tool;
 use ReflectionFunction;
