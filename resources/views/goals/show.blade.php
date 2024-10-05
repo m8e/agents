@@ -24,6 +24,13 @@
             {{ $goal->description }}
         </flux:subheading>
     </x-slot>
+
+        <flux:main container>
+            <flux:heading size="xl" level="1">Good afternoon, Olivia</flux:heading>
+            <flux:subheading size="lg" class="mb-6">Here's what's new today</flux:subheading>
+            <flux:separator variant="subtle" />
+        </flux:main>
+
         <flux:table class="mt-4">
             <flux:columns>
                 <flux:column>Task</flux:column>

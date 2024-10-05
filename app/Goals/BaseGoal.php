@@ -2,8 +2,8 @@
 
 namespace App\Goals;
 
-use Symfony\Component\Workflow\Registry;
 use App\Services\AgentService;
+use Symfony\Component\Workflow\Registry;
 
 abstract class AbstractGoal
 {
@@ -16,7 +16,7 @@ abstract class AbstractGoal
         Registry $workflowRegistry,
         array $attributes = [],
     ) {
-        parent::__construct($attributes);
+        //        parent::__construct($attributes);
         $this->agentService = $agentService;
         $this->workflowRegistry = $workflowRegistry;
     }
@@ -64,7 +64,7 @@ abstract class AbstractGoal
     /**
      * This method can be overridden to add custom initialization logic.
      */
-    public function initializeGoal()
+    public function initializeGoal(): void
     {
         // Custom initialization logic for specific goal types
     }

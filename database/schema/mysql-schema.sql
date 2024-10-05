@@ -116,12 +116,12 @@ CREATE TABLE `goals` (
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `start_date` datetime NOT NULL DEFAULT '2024-09-23 07:03:10',
+  `start_date` date DEFAULT NULL,
   `deadline_date` datetime DEFAULT NULL,
-  `progress` int NOT NULL DEFAULT '0',
-  `status` enum('not_started','in_progress','completed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_started',
-  `priority` enum('critical','high','normal','low','backlog') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'normal',
-  `risk_level` enum('low','medium','high') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'low',
+  `progress` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `priority` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `risk_level` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `estimated_tokens` int DEFAULT NULL,
   `actual_tokens` int DEFAULT NULL,
   `outcome` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -317,6 +317,19 @@ CREATE TABLE `sessions` (
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `task_closure`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `task_closure` (
+  `ancestor` bigint unsigned NOT NULL,
+  `descendant` bigint unsigned NOT NULL,
+  `depth` int unsigned NOT NULL,
+  PRIMARY KEY (`ancestor`,`descendant`),
+  KEY `task_closure_descendant_foreign` (`descendant`),
+  CONSTRAINT `task_closure_ancestor_foreign` FOREIGN KEY (`ancestor`) REFERENCES `tasks` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `task_closure_descendant_foreign` FOREIGN KEY (`descendant`) REFERENCES `tasks` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tasks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -329,6 +342,7 @@ CREATE TABLE `tasks` (
   `progress` int NOT NULL DEFAULT '0',
   `status` enum('not_started','in_progress','completed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_started',
   `priority` enum('critical','high','medium','low') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'medium',
+  `risk_level` enum('low','medium','high') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'medium',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -384,6 +398,22 @@ CREATE TABLE `teams` (
   KEY `teams_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `tools`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tools` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `agent_id` bigint unsigned NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `function_signature` json NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tools_agent_id_name_unique` (`agent_id`,`name`),
+  CONSTRAINT `tools_ibfk_1` FOREIGN KEY (`agent_id`) REFERENCES `agents` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -424,3 +454,6 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (9,'2024_09_21_0225
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (10,'2024_09_21_034816_create_permission_tables',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (11,'2024_09_22_113348_create_llm_messages_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (12,'2024_09_24_074241_change_tasks_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (13,'2024_09_27_150907_modify_goals_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (14,'2024_10_04_112533_create_tasks_closure',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (15,'2024_10_04_112807_alter_tasks_table',4);

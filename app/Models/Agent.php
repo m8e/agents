@@ -28,11 +28,6 @@ class Agent extends Model
         'last_active_at' => 'datetime',
     ];
 
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
-
     public function goals()
     {
         return $this->hasMany(Goal::class, 'assigned_to');
@@ -40,6 +35,11 @@ class Agent extends Model
 
     public function tasks()
     {
-        return $this->hasMany(Task::class, 'assigned_to');
+        return $this->belongsToMany(Task::class, 'agent_task');
+    }
+
+    public function tools()
+    {
+        return $this->hasMany(Tool::class);
     }
 }

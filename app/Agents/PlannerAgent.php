@@ -26,7 +26,6 @@ class PlannerAgent extends BaseAgent
             options: [
                 'prompt' => "Given the user's goal, generate a plan with subtasks, agents, and tools required to accomplish it.",
             ],
-
             mode: Mode::Json
         );
 
@@ -38,7 +37,7 @@ class PlannerAgent extends BaseAgent
         // TODO: Implement processMessage() method.
     }
 
-    public function executePlan(Plan $plan)
+    public function executePlan(Plan $plan): void
     {
         foreach ($plan->tasks as $task) {
             $agentName = $task['agent'] ?? 'DefaultAgent';
@@ -62,7 +61,7 @@ class PlannerAgent extends BaseAgent
         // For example, using a factory pattern or a service container
     }
 
-    protected function enableToolForAgent(BaseAgent $agent, string $toolName)
+    protected function enableToolForAgent(BaseAgent $agent, string $toolName): void
     {
         // Logic to enable a tool for the agent
         // This might involve setting up the agent's capabilities
