@@ -9,7 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('agents', function (Blueprint $table) {
-            $table->drop('team_id');
+            // remove foreign agents_team_id_foreign and drop team_id column
+            $table->dropForeign('agents_team_id_foreign');
+            $table->dropColumn('team_id');
         });
     }
 };
